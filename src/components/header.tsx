@@ -1,6 +1,11 @@
 import React from 'react'
 
-export const Header = ({ user, setUser }) => (
+export interface IHeaderProps {
+  user: string | undefined
+  setUser: React.Dispatch<React.SetStateAction<string | undefined>>
+}
+
+export const Header = ({ user, setUser }: IHeaderProps) => (
   <div>
     Welcome, {user}!
     <button type='button' onClick={() => setUser('')}>

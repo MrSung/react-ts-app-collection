@@ -1,10 +1,14 @@
 import React from 'react'
 
-export const Login = ({ setUser }) => {
+export interface ILoginProps {
+  setUser: React.Dispatch<React.SetStateAction<string | undefined>>
+}
+
+export const Login = ({ setUser }: ILoginProps) => {
   const [username, setUsername] = React.useState('')
 
-  const handleSubmit = event => {
-    event.preventDefault()
+  const handleSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
+    ev.preventDefault()
 
     setUser(username)
   }
@@ -14,7 +18,7 @@ export const Login = ({ setUser }) => {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
-          onChange={event => setUsername(event.target.value)}
+          onChange={ev => setUsername(ev.target.value)}
           placeholder='Input username'
         />
         <button type='submit'>Submit</button>

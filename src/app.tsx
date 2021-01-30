@@ -1,28 +1,60 @@
-import React, {
-  createContext,
-  useContext,
-  useReducer,
-  useState,
-  useEffect
-} from 'react'
+import React, { createContext, useReducer, useState, useEffect } from 'react'
 
 import { Login } from './components/login'
 import { Header } from './components/header'
 import { CreatePost } from './components/create-post'
 import { PostList } from './components/post-list'
 
-export const PostContext = createContext({
-  posts: []
-})
-export const UserContext = createContext(null)
+export interface IPost {
+  image: File | null
+  content: string
+  user: User
+  id: string
+}
 
-const postReducer = (state, action) => {
+export interface IState {
+  posts: IPost[]
+}
+
+export type User = string | undefined
+
+export enum ActionType {
+  ADD_POST = 'ADD_POST',
+  DELETE_POST = 'DELETE_POST'
+}
+
+export interface IAddPost {
+  type: ActionType.ADD_POST
+  payload: {
+    post: IPost
+  }
+}
+
+export interface IDeletePost {
+  type: ActionType.DELETE_POST
+  payload: {
+    id: string
+  }
+}
+
+export type Action = IAddPost | IDeletePost
+
+export const PostContext = createContext(
+  {} as {
+    state: IState
+    dispatch: React.Dispatch<Action>
+  }
+)
+
+export const UserContext = createContext<User>(undefined)
+
+const postsReducer = (state: IState, action: Action) => {
   switch (action.type) {
-    case 'ADD_POST': {
+    case ActionType.ADD_POST: {
       const newPost = action.payload.post
       return { posts: [newPost, ...state.posts] }
     }
-    case 'DELETE_POST': {
+    case ActionType.DELETE_POST: {
       const deletePostId = action.payload.id
       return { posts: state.posts.filter(post => post.id !== deletePostId) }
     }
@@ -31,10 +63,13 @@ const postReducer = (state, action) => {
   }
 }
 
+const initialPostState: IState = {
+  posts: []
+}
+
 export const App = () => {
-  const initialPostState = useContext(PostContext)
-  const [state, dispatch] = useReducer(postReducer, initialPostState)
-  const [user, setUser] = useState(undefined)
+  const [state, dispatch] = useReducer(postsReducer, initialPostState)
+  const [user, setUser] = useState<User>(undefined)
 
   useEffect(() => {
     document.title = user ? `${user}'s feed` : 'Please login'
