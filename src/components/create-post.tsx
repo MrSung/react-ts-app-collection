@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef } from 'react'
 
-import { PostContext, User, ActionType } from '../app'
+import { PostContext, User, ActionType } from '../app-social-media'
 
 export interface ICreatePostProps {
   user: User

@@ -1,6 +1,11 @@
 import React from 'react'
 
-import { UserContext, PostContext, IPost, ActionType } from '../app'
+import {
+  UserContext,
+  PostContext,
+  IPost,
+  ActionType
+} from '../app-social-media'
 
 type PostProps = IPost
 

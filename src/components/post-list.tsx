@@ -1,6 +1,6 @@
 import React from 'react'
 
-import type { IPost } from '../app'
+import type { IPost } from '../app-social-media'
 import { Post } from './post'
 
 export interface IPostListProps {
