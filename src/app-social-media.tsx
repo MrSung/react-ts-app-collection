@@ -67,7 +67,7 @@ const initialPostState: IState = {
   posts: []
 }
 
-export const App = () => {
+export const AppSocialMedia = () => {
   const [state, dispatch] = useReducer(postsReducer, initialPostState)
   const [user, setUser] = useState<User>(undefined)
 
