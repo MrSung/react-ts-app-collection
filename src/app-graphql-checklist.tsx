@@ -1,5 +1,20 @@
 import React, { useState } from 'react'
-import { gql, useQuery, useMutation } from '@apollo/client'
+import {
+  gql,
+  useQuery,
+  useMutation,
+  ApolloClient,
+  InMemoryCache
+} from '@apollo/client'
+
+/**
+ * Wrap the app with <ApolloProvider client={client}></ApolloProvider>
+ */
+
+export const client = new ApolloClient({
+  uri: 'https://healthy-locust-20.hasura.app/v1/graphql',
+  cache: new InMemoryCache()
+})
 
 const GET_TODOS = gql`
   query getTodos {
