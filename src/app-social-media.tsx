@@ -1,9 +1,9 @@
 import React, { createContext, useReducer, useState, useEffect } from 'react'
 
-import { Login } from './components/login'
-import { Header } from './components/header'
-import { CreatePost } from './components/create-post'
-import { PostList } from './components/post-list'
+import { Login } from './components-social-media/login'
+import { Header } from './components-social-media/header'
+import { CreatePost } from './components-social-media/create-post'
+import { PostList } from './components-social-media/post-list'
 
 export interface IPost {
   image: File | null
