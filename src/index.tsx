@@ -1,20 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
-
-import { AppGraphqlChecklist } from './app-graphql-checklist'
-
-const client = new ApolloClient({
-  uri: 'https://healthy-locust-20.hasura.app/v1/graphql',
-  cache: new InMemoryCache()
-})
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <React.StrictMode>
-      <AppGraphqlChecklist />
-    </React.StrictMode>
-  </ApolloProvider>,
+  <React.StrictMode>
+    <div>App</div>
+  </React.StrictMode>,
   document.getElementById('root')
 )
 
