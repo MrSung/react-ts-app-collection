@@ -1,9 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import { AppApolloMusicShare } from './app-apollo-music-share'
+
 ReactDOM.render(
   <React.StrictMode>
-    <div>App</div>
+    <AppApolloMusicShare />
   </React.StrictMode>,
   document.getElementById('root')
 )
