@@ -13,6 +13,7 @@
     "format": "prettier --check \"src/**/*.{js,jsx,ts,tsx}\"",
     "format:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "stylelint": "stylelint 'src/**/*.{ts,tsx}'",
+    "clean": "rm -rf build node_modules/.cache",
     "test": "web-test-runner \"src/**/*.test.tsx\"",
     "postinstall": "typesync"
   },
