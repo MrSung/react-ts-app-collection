@@ -4,15 +4,23 @@ import {
   useQuery,
   useMutation,
   ApolloClient,
+  createHttpLink,
   InMemoryCache
 } from '@apollo/client'
+
+const httpLink = createHttpLink({
+  uri: 'https://healthy-locust-20.hasura.app/v1/graphql',
+  headers: {
+    'x-hasura-admin-secret': import.meta.env.SNOWPACK_PUBLIC_HASURA_SECRET
+  }
+})
 
 /**
  * Wrap the app with <ApolloProvider client={client}></ApolloProvider>
  */
 
 export const client = new ApolloClient({
-  uri: 'https://healthy-locust-20.hasura.app/v1/graphql',
+  link: httpLink,
   cache: new InMemoryCache()
 })
 
@@ -81,14 +89,6 @@ export const AppGraphqlChecklist = () => {
   })
   const [deleteTodo] = useMutation(DELETE_TODO)
 
-  if (loading) return <div>loading...</div>
-
-  if (error) {
-    console.error(error)
-
-    return <div>Error fetching todos!</div>
-  }
-
   const handleAddTodo = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
 
@@ -119,6 +119,14 @@ export const AppGraphqlChecklist = () => {
         cache.writeQuery({ query: GET_TODOS, data: { todos: newTodos } })
       }
     })
+  }
+
+  if (loading) return <div>loading...</div>
+
+  if (error) {
+    console.error(error)
+
+    return <div>Error fetching todos!</div>
   }
 
   return (
