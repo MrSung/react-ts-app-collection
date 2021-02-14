@@ -1,11 +1,44 @@
 import React from 'react'
+import {
+  // gql,
+  // useQuery,
+  // useMutation,
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache
+} from '@apollo/client'
 import { Grid, useMediaQuery, Hidden } from '@material-ui/core'
-import { useTheme } from '@material-ui/core/styles'
+import { useTheme, createMuiTheme } from '@material-ui/core/styles'
+import { teal, purple } from '@material-ui/core/colors'
 
 import { Header } from './components-apollo-music-share/header'
 import { AddSong } from './components-apollo-music-share/add-song'
 import { SongList } from './components-apollo-music-share/song-list'
 import { SongPlayer } from './components-apollo-music-share/song-player'
+
+const httpLink = createHttpLink({
+  uri: 'https://healthy-locust-21.hasura.app/v1/graphql',
+  headers: {
+    'x-hasura-admin-secret': import.meta.env.SNOWPACK_PUBLIC_HASURA_SECRET
+  }
+})
+
+/**
+ * Wrap the app with <ApolloProvider client={client}></ApolloProvider>
+ */
+
+export const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache()
+})
+
+export const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+    primary: teal,
+    secondary: purple
+  }
+})
 
 export const AppApolloMusicShare = () => {
   const theme = useTheme()

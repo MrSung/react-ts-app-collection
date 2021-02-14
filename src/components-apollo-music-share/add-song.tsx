@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   TextField,
   InputAdornment,
@@ -10,6 +10,11 @@ import {
   makeStyles
 } from '@material-ui/core'
 import { Link, AddBoxOutlined } from '@material-ui/icons'
+import ReactPlayer from 'react-player'
+// @ts-ignore: no type definition file...
+import SoundCloudPlayer from 'react-player/lib/players/SoundCloud'
+// @ts-ignore: no type definition file...
+import YouTubePlayer from 'react-player/lib/players/YouTubePlayer'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -32,11 +37,51 @@ const useStyles = makeStyles(theme => ({
 
 export const AddSong = () => {
   const classes = useStyles()
+  const [url, setUrl] = useState('')
+  const [playable, setPlayable] = useState(false)
   const [dialog, setDialog] = useState(false)
 
   const handleCloseDialog = () => {
     setDialog(false)
   }
+
+  const getYouTubeInfo = player => {
+    const duration = player.getDuration()
+    const { title, video_id, author } = player.getVideoData()
+    const thumbnail = `http://img.youtube.com/vi/${video_id}/0.jpg`
+    return {
+      duration,
+      title,
+      artist: author,
+      thumbnail
+    }
+  }
+  const getSoundCloudInfo = async player => {
+    return new Promise(resolve => {
+      player.getCurrentSound(songData => {
+        if (songData) {
+          resolve({
+            duration: songData.duration / 1000,
+            title: songData.title,
+            artist: songData.user.username,
+            thumbnail: songData.artwork_url.replace('-large', '-t500x500')
+          })
+        }
+      })
+    })
+  }
+  const handleEditSong = async ({ player }) => {
+    const nestedPlayer = player.player.player
+    const songData = nestedPlayer.getVideoData
+      ? getYouTubeInfo(nestedPlayer)
+      : await getSoundCloudInfo(nestedPlayer)
+  }
+
+  useEffect(() => {
+    const isPlayable =
+      SoundCloudPlayer.canPlay(url) || YouTubePlayer.canPlay(url)
+    setPlayable(isPlayable)
+  }, [url])
 
   return (
     <div className={classes.container}>
@@ -71,8 +116,10 @@ export const AddSong = () => {
         </DialogActions>
       </Dialog>
       <TextField
+        value={url}
+        onChange={ev => setUrl(ev.target.value)}
+        placeholder='Add YouTube or SoundCloud Url'
         className={classes.urlInput}
-        placeholder='Add Youtube or Soundcloud Url'
         fullWidth
         margin='normal'
         type='url'
@@ -85,14 +132,16 @@ export const AddSong = () => {
         }}
       />
       <Button
-        className={classes.addSongButton}
+        disabled={!playable}
         onClick={() => setDialog(true)}
+        className={classes.addSongButton}
         variant='contained'
         color='primary'
         endIcon={<AddBoxOutlined />}
       >
         Add
       </Button>
+      <ReactPlayer url={url} hidden onReady={handleEditSong} />
     </div>
   )
 }

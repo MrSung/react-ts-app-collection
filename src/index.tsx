@@ -1,12 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { ApolloProvider } from '@apollo/client'
+import { MuiThemeProvider, CssBaseline } from '@material-ui/core'
 
-import { AppApolloMusicShare } from './app-apollo-music-share'
+import { client, theme, AppApolloMusicShare } from './app-apollo-music-share'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <AppApolloMusicShare />
-  </React.StrictMode>,
+  <ApolloProvider client={client}>
+    <MuiThemeProvider theme={theme}>
+      <React.StrictMode>
+        <CssBaseline />
+        <AppApolloMusicShare />
+      </React.StrictMode>
+    </MuiThemeProvider>
+  </ApolloProvider>,
   document.getElementById('root')
 )
 

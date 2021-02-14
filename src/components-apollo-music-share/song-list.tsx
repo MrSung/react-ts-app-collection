@@ -1,4 +1,5 @@
 import React from 'react'
+import { useQuery } from '@apollo/client'
 import {
   CircularProgress,
   Card,
@@ -10,21 +11,23 @@ import {
   makeStyles
 } from '@material-ui/core'
 import { PlayArrow, Save } from '@material-ui/icons'
+import { GET_SONGS } from '../graphql-apollo-music-share/queries'
 
 interface ISong {
+  id: string
+  url: string
   title: string
   artist: string
+  duration: number
   thumbnail: string
 }
 
-const song: ISong = {
-  title: 'LÜNE',
-  artist: 'MÖÖN',
-  thumbnail: 'http://img.youtube.com/vi/--ZtUFsIgMk/0.jpg'
+interface ISongs {
+  songs: ISong[]
 }
 
 export const SongList = () => {
-  const loading = false
+  const { data, loading, error } = useQuery<ISongs>(GET_SONGS)
 
   if (loading) {
     return (
@@ -41,10 +44,14 @@ export const SongList = () => {
     )
   }
 
+  if (error) return <div>Error fetching songs</div>
+
+  if (typeof data === 'undefined') return null
+
   return (
     <div>
-      {Array.from({ length: 10 }, () => song).map((song, i) => (
-        <Song key={i} song={song} />
+      {data.songs.map(song => (
+        <Song key={song.id} song={song} />
       ))}
     </div>
   )
